@@ -127,12 +127,12 @@ MultiInventory is intended to be used as an interface between Shopware and your 
 
 Availability of Products is defined in 2 steps
 
-1. WarehouseGroups can be assigned to Rules (Rule builder)
-    1. If the rule is invalid, this Group will not be considered in calculating Product availability.
-    2. Products / Warehouses still can be available via other groups.
-2. Products can have a stock per Warehouse
-    1. All Warehouses inside an active WarehouseGroup are taken into account for calculating the total stock of a specific Product.
-    2. Warehouses are unique, but can be assigned to multiple Groups (e.g. all Warehouses in the Group "Germany" can also be in the Group "Europe").
+* WarehouseGroups can be assigned to Rules (Rule builder)
+  * If the rule is invalid, this Group will not be considered in calculating Product availability.
+  * Products / Warehouses still can be available via other groups.
+* Products can have a stock per Warehouse
+  * All Warehouses inside an active WarehouseGroup are taken into account for calculating the total stock of a specific Product.
+  * Warehouses are unique, but can be assigned to multiple Groups (e.g. all Warehouses in the Group "Germany" can also be in the Group "Europe").
 
 If both conditions are true (e.g. "Customer is in a specific customer group" and "requested stock <= total Product stock of all valid Warehouses"), the requested Product is considered available.
 
