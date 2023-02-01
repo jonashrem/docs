@@ -4,7 +4,7 @@
 
 ### Commercial Plugin
 
-As MultiInventory is part of the Commercial plugin, it requires an existing Shopware 6 installation and the activated Commercial plugin on top. The plugin can be installed following these [install instructions](../../../../guides/plugins/plugins/plugin-base-guide#install-your-plugin). In addition, the MultiInventory feature requires [Shopware Beyond](https://docs.shopware.com/en/shopware-6-en/features/shopware-beyond).
+As Multi-Inventory is part of the Commercial plugin, it requires an existing Shopware 6 installation and the activated Commercial plugin on top. The plugin can be installed following these [install instructions](../../../../guides/plugins/plugins/plugin-base-guide#install-your-plugin). In addition, the Multi-Inventory feature requires [Shopware Beyond](https://docs.shopware.com/en/shopware-6-en/features/shopware-beyond).
 
 ### Admin UI
 
@@ -12,7 +12,7 @@ While this feature is supposed to be used API first, i.e. by ERP systems, it sti
 
 ### Admin API
 
-To create, alter and/or delete warehouse groups, warehouses and other things related to MultiInventory, you can access Admin API endpoints decscribed in the following paragraphs. The following links provide further documentation regarding the general use of the Admin API.
+To create, alter and/or delete warehouse groups, warehouses and other things related to Multi-Inventory, you can access Admin API endpoints decscribed in the following paragraphs. The following links provide further documentation regarding the general use of the Admin API.
 
 * [Authentication & Authorization](https://shopware.stoplight.io/docs/admin-api/ZG9jOjEwODA3NjQx-authentication)
 * [Request & Response Structure](https://shopware.stoplight.io/docs/admin-api/ZG9jOjEyMzAzNDU1-request-and-response-structure)
@@ -121,7 +121,7 @@ Note: Every described behavior only applies to Products, which are assigned to W
 
 ### ERP System as Single-Source-of-Truth
 
-MultiInventory is intended to be used as an interface between Shopware and your resource management software. This means that Shopware will only calculate availability of Products based on your Warehouse configuration, and only changes stocks of a Warehouse, when an order is created. This is to prevent oversales, while also making your system the single source of truth - making it easier to maintain both systems at the same time.
+Multi-Inventory is intended to be used as an interface between Shopware and your resource management software. This means that Shopware will only calculate availability of Products based on your Warehouse configuration, and only changes stocks of a Warehouse, when an order is created. This is to prevent oversales, while also making your system the single source of truth - making it easier to maintain both systems at the same time.
 
 ### Product Availability
 
@@ -130,17 +130,18 @@ Availability of Products is defined in 2 steps
 * WarehouseGroups can be assigned to Rules (Rule builder)
   * If the rule is invalid, this Group will not be considered in calculating Product availability.
   * Products / Warehouses still can be available via other groups.
+  * If multiple rules a valid, WarehosueGroups can be prioritized with their own priority, they are not tied to rule priority.
 * Products can have a stock per Warehouse
   * All Warehouses inside an active WarehouseGroup are taken into account for calculating the total stock of a specific Product.
   * Warehouses are unique, but can be assigned to multiple Groups (e.g. all Warehouses in the Group "Germany" can also be in the Group "Europe").
 
-If both conditions are true (e.g. "Customer is in a specific customer group" and "requested stock <= total Product stock of all valid Warehouses"), the requested Product is considered available.
+If both conditions are true (e.g. "Customer is in a specific customer group" and "requested stock <= total Product stock of all valid Warehouses"), the requested Product is considered available. This calculation also considers other Product properties like `max_purchase`, `min_purchase`, and `purchase_steps`.
 
 ## Caveats
 
-When working with the MultiInventory feature, there are some caveats to keep in mind
+When working with the Multi-Inventory feature, there are some caveats to keep in mind
 
-* We decided to **not** add the functionality of `product.available_stock` to MultiInventory. The stock of Products (or rather ProductWarehouses) will now be reduced immediately after an order was placed. It is no longer necessary to set any order state (for Products assigned to WarehouseGroups) to reduce the stock.
+* We decided to **not** add the functionality of `product.available_stock` to Multi-Inventory. The stock of Products (or rather ProductWarehouses) will now be reduced immediately after an order was placed. It is no longer necessary to set any order state (for Products assigned to WarehouseGroups) to reduce the stock.
   * Order states are still important for any other workflow, e.g. FlowBuilder triggers, or event subscribers in general.
-* MultiInventory will not recalculate the stock of Products assigned to WarehouseGroups when editing existing orders in any way. The whole stock handling in this regard is supposed to be done by an external ERP system, the information then need to be pushed to your Shopware instance (e.g. by immediate or daily syncs).
-* If you decide to stop using MultiInventory for certain products (deleting existing data or deactivating the feature), Shopware will fall back into its default behavior. This is especially important when editing existing orders, since the stocks were taken from ProductWarehouse entities. Shopware will use incorrect data or values to increase/decrease Product stocks, if the order originally included ProductWarehouses.
+* Multi-Inventory will not recalculate the stock of Products assigned to WarehouseGroups when editing existing orders in any way. The whole stock handling in this regard is supposed to be done by an external ERP system, the information then need to be pushed to your Shopware instance (e.g. by immediate or daily syncs).
+* If you decide to stop using Multi-Inventory for certain products (deleting existing data or deactivating the feature), Shopware will fall back into its default behavior. This is especially important when editing existing orders, since the stocks were taken from ProductWarehouse entities. Shopware will use incorrect data or values to increase/decrease Product stocks, if the order originally included ProductWarehouses.
